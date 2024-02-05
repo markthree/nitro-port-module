@@ -46,6 +46,30 @@ export default defineNitroConfig({
 });
 ```
 
+#### polyfill
+
+Default automatic detection
+
+```ts
+// nuxt.config.ts
+import nitroPort from "nitro-port-module";
+
+export default defineNuxtConfig({
+  nitro: {
+    modules: [
+      nitroPort({
+        port: 4000,
+        polyfill(nitro, port) {
+          return nitro.options.preset.includes("deno")
+            ? `Deno.env.set("PORT", "${port}")`
+            : `process.env.PORT = '${port}'`;
+        },
+      }),
+    ],
+  },
+});
+```
+
 <br />
 
 ## License

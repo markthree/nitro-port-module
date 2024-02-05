@@ -22,7 +22,11 @@ import nitroPort from "nitro-port-module";
 
 export default defineNuxtConfig({
   nitro: {
-    modules: [nitroPort()],
+    modules: [
+      nitroPort({
+        port: 4000,
+      }),
+    ],
   },
 });
 ```
@@ -34,90 +38,37 @@ export default defineNuxtConfig({
 import nitroPort from "nitro-port-module";
 
 export default defineNitroConfig({
-  modules: [nitroPort()],
-});
-```
-
-<br />
-
-### preset
-
-```ts
-// nitro.config.js
-import nitroPort from "nitro-port-module";
-
-export default defineNitroConfig({
   modules: [
     nitroPort({
-      // 支持 "spa", "ssg"，"fallback" and false (禁用)，默认为 "fallback"
-      preset: "fallback",
+      port: 4000,
     }),
   ],
 });
 ```
 
-#### fallback
+#### polyfill
 
-支持在生产环境中回滚任何文件 (即使是动态的 添加到 public 中的文件)
-
-#### spa
-
-允许跑 `spa` 在 `public` 中
-
-#### ssg
-
-允许跑 `ssg` 在 `public` 中
-
-<br />
-
-#### 自定义
-
-1. 先禁用预设
+默认自动检测
 
 ```ts
-// nitro.config.js
+// nuxt.config.ts
 import nitroPort from "nitro-port-module";
 
-export default defineNitroConfig({
-  modules: [
-    nitroPort({
-      preset: false,
-    }),
-  ],
+export default defineNuxtConfig({
+  nitro: {
+    modules: [
+      nitroPort({
+        port: 4000,
+        polyfill(nitro, port) {
+          return nitro.options.preset.includes("deno")
+            ? `Deno.env.set("PORT", "${port}")`
+            : `process.env.PORT = '${port}'`;
+        },
+      }),
+    ],
+  },
 });
 ```
-
-2. 创建一个中间件
-
-```ts
-// middleware/public-fallback.ts
-import { createPublicFallbackMiddleware } from "#nitro-public";
-
-export default createPublicFallbackMiddleware((withoutSlashPathname) => {
-  // 一些逻辑 ...
-
-  return {
-    file: "index.html", // 你的文件
-    contentType: "text/html", // 如果没有设置，将自动从文件后缀名推断
-    withPublicDir: true, // 默认为 true，自动帮你设置正确路径
-  };
-});
-```
-
-##### virtual
-
-除了提供 `createPublicFallbackMiddleware` 之外, `#nitro-public` 也提供了
-`publicDir` 和 `serverDir`
-
-```ts
-import {
-  createPublicFallbackMiddleware,
-  publicDir,
-  serverDir,
-} from "#nitro-public";
-```
-
-所有的函数都是 `类型安全` 并且支持 `开发` 和 `生产` 环境的 (纯 node 运行时)
 
 <br />
 
