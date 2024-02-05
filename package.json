@@ -50,6 +50,7 @@
     "@types/node": "^18.19.10",
     "bumpp": "^9.3.0",
     "defu": "^6.1.4",
+    "m-type-tools": "^0.5.1",
     "nitropack": "^2.8.1",
     "typescript": "^5.3.3",
     "unbuild": "^2.0.0"

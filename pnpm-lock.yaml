@@ -17,6 +17,9 @@ importers:
       defu:
         specifier: ^6.1.4
         version: 6.1.4
+      m-type-tools:
+        specifier: ^0.5.1
+        version: 0.5.1
       nitropack:
         specifier: ^2.8.1
         version: 2.8.1
@@ -2392,6 +2395,10 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       yallist: 4.0.0
+    dev: true
+
+  /m-type-tools@0.5.1:
+    resolution: {integrity: sha512-04WUOj5JFthdA/RgUJALYP5SM8H9IRyQNI2/VwN2dASzfqDgQhus+kUX357mPfSgPq7U6IGRaL1/P75vwp2USQ==}
     dev: true
 
   /magic-string@0.30.5:
