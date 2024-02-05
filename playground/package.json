@@ -1,0 +1,16 @@
+{
+  "name": "playground",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nitro dev",
+    "build": "nitro build",
+    "prepare": "nitro prepare",
+    "preview": "node ./.output/server/index.mjs"
+  },
+  "devDependencies": {
+    "nitro-port-module": "workspace:*",
+    "nitropack": "^2.8.1",
+    "chokidar": "^3.5.3"
+  }
+}

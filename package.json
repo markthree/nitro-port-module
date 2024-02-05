@@ -1,0 +1,60 @@
+{
+  "version": "0.0.5",
+  "name": "nitro-port-module",
+  "description": "Allow changing the nitro default port | 允许改变 nitro 默认 port",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/markthree/nitro-port-module.git"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "unbuild",
+    "dev": "pnpm play:dev",
+    "prepublishOnly": "pnpm build",
+    "build:stub": "pnpm build --stub",
+    "play:dev": "pnpm -C playground dev",
+    "play:build": "pnpm -C playground build",
+    "play:preview": "pnpm -C playground preview",
+    "release": "bumpp --commit --push --tag && npm publish"
+  },
+  "keywords": [
+    "node",
+    "nitro",
+    "port",
+    "module",
+    "nitropack"
+  ],
+  "author": {
+    "name": "markthree",
+    "email": "1801982702@qq.com",
+    "url": "https://github.com/markthree"
+  },
+  "bugs": {
+    "email": "1801982702@qq.com",
+    "url": "https://github.com/markthree/nitro-port-module/issues"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^18.19.10",
+    "bumpp": "^9.3.0",
+    "defu": "^6.1.4",
+    "nitropack": "^2.8.1",
+    "typescript": "^5.3.3",
+    "unbuild": "^2.0.0"
+  },
+  "peerDependencies": {
+    "nitropack": ">=2.0.0"
+  }
+}
