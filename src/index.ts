@@ -43,7 +43,7 @@ function nitroPort(options = defaultOptions): NitroModule {
     name: "nitro-port",
     setup(nitro) {
       const { preset, dev } = nitro.options;
-      const logger = nitro.logger.withTag("nitro");
+      const logger = nitro.logger.withTag("port");
       if (!isNumber(port)) {
         logger.error("port must be a number");
         return;
