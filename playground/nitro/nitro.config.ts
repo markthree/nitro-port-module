@@ -1,4 +1,4 @@
-import nitroPort from "../src";
+import nitroPort from "../../src";
 
 export default defineNitroConfig({
   modules: [

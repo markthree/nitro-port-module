@@ -13,10 +13,18 @@ interface Options {
    * @default Default automatic detection
    */
   polyfill?: string | PolyfillFn;
+
+  /**
+   * Always override environment variables
+   * This option allows you to modify the port during nuxt development
+   * @default true
+   */
+  override?: boolean;
 }
 
 const defaultOptions: Options = {
   port: 3000,
+  override: true,
   polyfill(nitro, port) {
     return nitro.options.preset.includes("deno")
       ? `Deno.env.set("PORT", "${port}")`
@@ -25,11 +33,16 @@ const defaultOptions: Options = {
 };
 
 function nitroPort(options = defaultOptions): NitroModule {
+  const { port, polyfill, override } = options = defu(options, defaultOptions);
+
+  if (override) {
+    process.env.PORT = String(parseInt(String(port)));
+  }
+
   return {
     name: "nitro-port",
     setup(nitro) {
       const { preset, dev } = nitro.options;
-      const { port, polyfill } = options = defu(options, defaultOptions);
       const logger = nitro.logger.withTag("nitro");
       if (!isNumber(port)) {
         logger.error("port must be a number");
