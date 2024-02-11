@@ -60,7 +60,6 @@ function nitroPort(options = defaultOptions): NitroModule {
       }
 
       if (dev) {
-        process.env.PORT = String(parseInt(String(port)));
         return;
       }
 
