@@ -24,9 +24,9 @@
     "dev": "pnpm play:dev",
     "prepublishOnly": "pnpm build",
     "build:stub": "pnpm build --stub",
-    "play:dev": "pnpm -C playground dev",
-    "play:build": "pnpm -C playground build",
-    "play:preview": "pnpm -C playground preview",
+    "play:dev": "pnpm -C playground/nitro dev",
+    "play:build": "pnpm -C playground/nitro build",
+    "play:preview": "pnpm -C playground/nitro preview",
     "release": "bumpp --commit --push --tag && npm publish"
   },
   "keywords": [
