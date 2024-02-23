@@ -4,6 +4,12 @@ Allow changing the nitro default port
 
 <br />
 
+## README 🦉
+
+[简体中文](./README_CN.md) | English
+
+<br />
+
 ## Usage
 
 ### install
@@ -64,6 +70,28 @@ export default defineNuxtConfig({
             ? `Deno.env.set("PORT", "${port}")`
             : `process.env.PORT = '${port}'`;
         },
+      }),
+    ],
+  },
+});
+```
+
+### compatible
+
+In older versions of Nuxt3, there might not be Nitro modules. In this case, you
+can try using the following configuration.
+
+```ts
+import { ViteNitroPort } from "nitro-port-module";
+
+export default defineNuxtConfig({
+  devServer: {
+    port: 5000,
+  },
+  vite: {
+    plugins: [
+      ViteNitroPort({
+        port: 5000,
       }),
     ],
   },

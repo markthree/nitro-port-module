@@ -4,6 +4,12 @@
 
 <br />
 
+## README 🦉
+
+简体中文 | [English](./README.md)
+
+<br />
+
 ## 使用
 
 ### 安装
@@ -64,6 +70,26 @@ export default defineNuxtConfig({
             ? `Deno.env.set("PORT", "${port}")`
             : `process.env.PORT = '${port}'`;
         },
+      }),
+    ],
+  },
+});
+```
+
+### 兼容性
+
+在旧版本的 Nuxt3 中，可能没有 Nitro 模块。在这种情况下，您可以尝试使用以下配置。
+
+```ts
+import { ViteNitroPort } from "nitro-port-module";
+export default defineNuxtConfig({
+  devServer: {
+    port: 5000,
+  },
+  vite: {
+    plugins: [
+      ViteNitroPort({
+        port: 5000,
       }),
     ],
   },
