@@ -82,6 +82,7 @@ export default defineNuxtConfig({
 
 ```ts
 import { ViteNitroPort } from "nitro-port-module";
+
 export default defineNuxtConfig({
   devServer: {
     port: 5000,

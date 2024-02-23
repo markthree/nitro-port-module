@@ -44,10 +44,10 @@ function nitroPort(options = defaultOptions): NitroModule {
   const { port, polyfill, override } = options = defu(options, defaultOptions);
 
   if (!isNumber(port)) {
-    throw new Error("port must be a number");
+    throw new TypeError("port must be a number");
   }
   if (!isFunction(polyfill) && !isString(polyfill)) {
-    throw new Error("polyfill must be a function or string");
+    throw new TypeError("polyfill must be a function or string");
   }
 
   if (port === 3000) {
@@ -73,7 +73,7 @@ function nitroPort(options = defaultOptions): NitroModule {
       const plugins = nitro.options.rollupConfig.plugins ??= [];
 
       if (!files[preset]) {
-        throw new Error(
+        throw new TypeError(
           `preset "${preset}" is not supported by nitro-port-module`,
         );
       }
@@ -103,7 +103,7 @@ function nitroPort(options = defaultOptions): NitroModule {
         return;
       }
 
-      throw new Error(
+      throw new TypeError(
         `rollupConfig.plugins is not an array, nitro-port-module is not supported`,
       );
     },
@@ -152,10 +152,10 @@ export function ViteNitroPort(
   );
 
   if (!isNumber(port)) {
-    throw new Error("port must be a number");
+    throw new TypeError("port must be a number");
   }
   if (!isFunction(polyfill) && !isString(polyfill)) {
-    throw new Error("polyfill must be a function or string");
+    throw new TypeError("polyfill must be a function or string");
   }
   if (port === 3000) {
     // default is 3000, so we don't need to do anything
@@ -173,7 +173,7 @@ export function ViteNitroPort(
   }
 
   if (!files[preset]) {
-    throw new Error(
+    throw new TypeError(
       `preset "${preset}" is not supported by vite-plugins-nitro-port`,
     );
   }
