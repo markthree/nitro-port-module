@@ -1,0 +1,13 @@
+{
+  "name": "nuxt",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "prepare": "nuxt prepare",
+    "preview": "nuxt preview"
+  },
+  "devDependencies": {
+    "nuxt": "3.6.5",
+    "nitro-port-module": "workspace:*"
+  }
+}

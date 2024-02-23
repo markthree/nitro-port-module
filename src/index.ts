@@ -32,8 +32,31 @@ const defaultOptions: Options = {
   },
 };
 
+const files = {
+  "bun": "index.mjs",
+  "deno": "index.ts",
+  "deno-server": "chunks/nitro/deno-server.mjs",
+  "node-server": "chunks/nitro/node-server.mjs",
+  "node-cluster": "chunks/nitro/node-server.mjs",
+} as Record<string, string>;
+
 function nitroPort(options = defaultOptions): NitroModule {
   const { port, polyfill, override } = options = defu(options, defaultOptions);
+
+  if (!isNumber(port)) {
+    throw new Error("port must be a number");
+  }
+  if (!isFunction(polyfill) && !isString(polyfill)) {
+    throw new Error("polyfill must be a function or string");
+  }
+
+  if (port === 3000) {
+    // default is 3000, so we don't need to do anything
+    return {
+      name: "nitro-port",
+      setup() {},
+    };
+  }
 
   if (override) {
     process.env.PORT = String(parseInt(String(port)));
@@ -43,42 +66,16 @@ function nitroPort(options = defaultOptions): NitroModule {
     name: "nitro-port",
     setup(nitro) {
       const { preset, dev } = nitro.options;
-      const logger = nitro.logger.withTag("port");
-      if (!isNumber(port)) {
-        logger.error("port must be a number");
-        return;
-      }
-
-      if (!isFunction(polyfill) && !isString(polyfill)) {
-        logger.error("polyfill must be a function or string");
-        return;
-      }
-
-      if (port === 3000) {
-        // default is 3000, so we don't need to do anything
-        return;
-      }
-
       if (dev) {
         return;
       }
-
       nitro.options.rollupConfig ??= { output: {} };
       const plugins = nitro.options.rollupConfig.plugins ??= [];
 
-      const files = {
-        "bun": "index.mjs",
-        "deno": "index.ts",
-        "deno-server": "chunks/nitro/deno-server.mjs",
-        "node-server": "chunks/nitro/node-server.mjs",
-        "node-cluster": "chunks/nitro/node-server.mjs",
-      } as Record<string, string>;
-
       if (!files[preset]) {
-        logger.warn(
+        throw new Error(
           `preset "${preset}" is not supported by nitro-port-module`,
         );
-        return;
       }
 
       function usePolyfill(fileName: string) {
@@ -106,9 +103,97 @@ function nitroPort(options = defaultOptions): NitroModule {
         return;
       }
 
-      logger.warn(
+      throw new Error(
         `rollupConfig.plugins is not an array, nitro-port-module is not supported`,
       );
+    },
+  };
+}
+
+type Preset = "bun" | "deno" | "deno-server" | "node-server" | "node-cluster";
+
+type VitePolyfillFn = (preset: Preset, port: number) => string;
+
+type ViteOptions = {
+  /**
+   * @default 3000
+   */
+  port?: number;
+  /**
+   * @default Default automatic detection
+   */
+  polyfill?: string | VitePolyfillFn;
+
+  /**
+   * Always override environment variables
+   * This option allows you to modify the port during nuxt development
+   * @default true
+   */
+  override?: boolean;
+};
+
+const viteDefaultOptions: ViteOptions = {
+  port: 3000,
+  override: true,
+  polyfill(preset, port) {
+    return preset.includes("deno")
+      ? `Deno.env.set("PORT", "${port}")`
+      : `process.env.PORT = '${port}'`;
+  },
+};
+
+export function ViteNitroPort(
+  options = viteDefaultOptions,
+  preset: Preset = "node-server",
+) {
+  const { port, polyfill, override } = options = defu(
+    options,
+    viteDefaultOptions,
+  );
+
+  if (!isNumber(port)) {
+    throw new Error("port must be a number");
+  }
+  if (!isFunction(polyfill) && !isString(polyfill)) {
+    throw new Error("polyfill must be a function or string");
+  }
+  if (port === 3000) {
+    // default is 3000, so we don't need to do anything
+    return;
+  }
+
+  if (override) {
+    process.env.PORT = String(parseInt(String(port)));
+  }
+
+  if (process.env.NODE_ENV !== "production") {
+    return {
+      name: "vite-plugins-nitro-port",
+    };
+  }
+
+  if (!files[preset]) {
+    throw new Error(
+      `preset "${preset}" is not supported by vite-plugins-nitro-port`,
+    );
+  }
+
+  function usePolyfill(fileName: string) {
+    if (files[preset] === fileName) {
+      if (isString(polyfill)) {
+        return polyfill;
+      }
+      if (isFunction(polyfill)) {
+        return polyfill(preset, port!);
+      }
+    }
+    return "";
+  }
+
+  return {
+    name: "vite-plugins-nitro-port",
+    banner(ctx: { fileName: string }) {
+      return usePolyfill(ctx.fileName);
     },
   };
 }
