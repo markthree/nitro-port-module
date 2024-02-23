@@ -2,12 +2,19 @@
   "version": "0.1.1",
   "name": "nitro-port-module",
   "description": "Allow changing the nitro default port | 允许改变 nitro 默认 port",
-  "type": "module",
-  "main": "./dist/index.mjs",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/markthree/nitro-port-module.git"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
   },
   "files": [
     "dist"
