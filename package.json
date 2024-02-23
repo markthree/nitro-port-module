@@ -1,5 +1,5 @@
 {
-  "version": "0.1.1",
+  "version": "0.1.2",
   "name": "nitro-port-module",
   "description": "Allow changing the nitro default port | 允许改变 nitro 默认 port",
   "main": "./dist/index.cjs",
