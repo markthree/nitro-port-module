@@ -20,6 +20,8 @@ interface Options {
    * @default true
    */
   override?: boolean;
+
+  isEntry(preset: Preset | string, fileName: string): boolean;
 }
 
 const defaultOptions: Options = {
@@ -30,7 +32,12 @@ const defaultOptions: Options = {
       ? `Deno.env.set("PORT", "${port}")`
       : `process.env.PORT = '${port}'`;
   },
+  isEntry(preset, fileName) {
+    return files[preset] === fileName || runtimeEntry === fileName;
+  },
 };
+
+const runtimeEntry = "chunks/runtime.mjs";
 
 const files = {
   "bun": "index.mjs",
@@ -41,7 +48,10 @@ const files = {
 } as Record<string, string>;
 
 function nitroPort(options = defaultOptions): NitroModule {
-  const { port, polyfill, override } = options = defu(options, defaultOptions);
+  const { port, polyfill, override, isEntry } = options = defu(
+    options,
+    defaultOptions,
+  );
 
   if (!isNumber(port)) {
     throw new TypeError("port must be a number");
@@ -79,7 +89,7 @@ function nitroPort(options = defaultOptions): NitroModule {
       }
 
       function usePolyfill(fileName: string) {
-        if (files[preset] === fileName) {
+        if (isEntry(preset, fileName)) {
           if (isString(polyfill)) {
             return polyfill;
           }
@@ -130,6 +140,8 @@ type ViteOptions = {
    * @default true
    */
   override?: boolean;
+
+  isEntry(preset: Preset | string, fileName: string): boolean;
 };
 
 const viteDefaultOptions: ViteOptions = {
@@ -140,13 +152,16 @@ const viteDefaultOptions: ViteOptions = {
       ? `Deno.env.set("PORT", "${port}")`
       : `process.env.PORT = '${port}'`;
   },
+  isEntry(preset, fileName) {
+    return files[preset] === fileName || runtimeEntry === fileName;
+  },
 };
 
 export function ViteNitroPort(
   options = viteDefaultOptions,
   preset: Preset = "node-server",
 ) {
-  const { port, polyfill, override } = options = defu(
+  const { port, polyfill, override, isEntry } = options = defu(
     options,
     viteDefaultOptions,
   );
@@ -179,7 +194,7 @@ export function ViteNitroPort(
   }
 
   function usePolyfill(fileName: string) {
-    if (files[preset] === fileName) {
+    if (isEntry(fileName, preset)) {
       if (isString(polyfill)) {
         return polyfill;
       }
