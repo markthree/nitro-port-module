@@ -21,7 +21,7 @@ interface Options {
    */
   override?: boolean;
 
-  isEntry(preset: Preset | string, fileName: string): boolean;
+  isEntry?(preset: Preset | string, fileName: string): boolean;
 }
 
 const defaultOptions: Options = {
@@ -89,7 +89,7 @@ function nitroPort(options = defaultOptions): NitroModule {
       }
 
       function usePolyfill(fileName: string) {
-        if (isEntry(preset, fileName)) {
+        if (isEntry!(preset, fileName)) {
           if (isString(polyfill)) {
             return polyfill;
           }
@@ -141,7 +141,7 @@ type ViteOptions = {
    */
   override?: boolean;
 
-  isEntry(preset: Preset | string, fileName: string): boolean;
+  isEntry?(preset: Preset | string, fileName: string): boolean;
 };
 
 const viteDefaultOptions: ViteOptions = {
@@ -194,7 +194,7 @@ export function ViteNitroPort(
   }
 
   function usePolyfill(fileName: string) {
-    if (isEntry(fileName, preset)) {
+    if (isEntry!(fileName, preset)) {
       if (isString(polyfill)) {
         return polyfill;
       }
