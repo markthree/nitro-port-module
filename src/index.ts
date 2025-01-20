@@ -33,7 +33,8 @@ const defaultOptions: Options = {
       : `process.env.PORT = '${port}'`;
   },
   isEntry(preset, fileName) {
-    return files[preset] === fileName || runtimeEntry === fileName;
+    return files[preset] === fileName || runtimeEntry === fileName ||
+      fileName === "chunks/_/nitro.mjs";
   },
 };
 

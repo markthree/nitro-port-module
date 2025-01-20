@@ -9,8 +9,8 @@
     "preview": "node ./.output/server/index.mjs"
   },
   "devDependencies": {
+    "chokidar": "^4.0.3",
     "nitro-port-module": "workspace:*",
-    "nitropack": "^2.8.1",
-    "chokidar": "^3.5.3"
+    "nitropack": "^2.10.4"
   }
 }
