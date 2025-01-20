@@ -21,6 +21,11 @@ interface Options {
    */
   override?: boolean;
 
+  /**
+   * Determine which is the entry, defaults to automatic inference
+   * @param preset
+   * @param fileName
+   */
   isEntry?(preset: Preset | string, fileName: string): boolean;
 }
 
