@@ -33,6 +33,10 @@ const defaultOptions: Options = {
   port: 3000,
   override: true,
   polyfill(nitro, port) {
+    if (nitro.options.preset === "nitro-prerender") {
+      return "";
+    }
+
     return nitro.options.preset.includes("deno")
       ? `Deno.env.set("PORT", "${port}")`
       : `process.env.PORT = '${port}'`;
@@ -82,7 +86,7 @@ function nitroPort(options = defaultOptions): NitroModule {
     name: "nitro-port",
     setup(nitro) {
       const { preset, dev } = nitro.options;
-      if (dev) {
+      if (dev || preset === "nitro-prerender") {
         return;
       }
       nitro.options.rollupConfig ??= { output: {} };
